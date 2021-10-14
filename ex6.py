@@ -74,27 +74,33 @@ def getClassification(point, indexes):
             numBenign += 1
     return 'malignant' if numMalignant > numBenign else 'benign'
 
-def main():
-    data = getData("TrainingData.txt") #Training Data Stored
-    size = int(input("testSize: "))
-    k = int(input('k: '))
 
-    kf = KFold(n_splits = 10, random_state = 132, shuffle = True)
-    numRightClassifications = 0
-    numClassifications = len(data) 
+data = getData("TrainingData.txt") #Training Data Stored
+k = int(input('k: '))
+
+kf = KFold(n_splits = 10, random_state = 130, shuffle = True)
+numRightClassifications = 0
+numClassifications = len(data)
+accuracies = []
 
 
-    for train_index , test_index in kf.split(data):
-        print(test_index)
-        for index in test_index:
-            point = data[index];
-            pointClass = point[-1]
-            if getClassification(point, train_index) == pointClass:
-                numRightClassifications += 1
+for train_index , test_index in kf.split(data):
+    print(test_index)
+    ola = 0
+    oi = 0
+    for index in test_index:
+        point = data[index];
+        pointClass = point[-1]
+        ola += 1
+        if getClassification(point, train_index) == pointClass:
+            numRightClassifications += 1
+            oi += 1
+        accuracies.append(oi / ola)
 
-    print('Accuracy = ' + str(numRightClassifications / numClassifications))
+sum = 0
+for value in accuracies:
+    sum += value
+print('Accuracy1 = ' + str(sum / len(accuracies)))
+print('Accuracy2 = ' + str(numRightClassifications / numClassifications))
     
 
-if __name__ == '__main__':
-    main()
-    
