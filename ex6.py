@@ -50,8 +50,6 @@ def getData(fileName):
     return res
 
 # ------------------------------Global-Variables---------------------------
-
-
  
 def getDistance(point1, point2):
     sum = 0
