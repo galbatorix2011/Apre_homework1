@@ -20,21 +20,6 @@ def getVectors(indice):
         res.append(line[indice])
     return res
 
-def oldgetData(fileName):
-    res = []
-    #Reads the file
-    with open(fileName) as f: 
-        lines = f.readlines()
-    #Formats all lines
-    for line in lines:
-        tmp = line[:-1].split(",") #removes the /n from the end of each line
-        for i in range(len(tmp) - 1): #does not check the last element cause its not an int
-            try: #Truns every str into int
-                tmp[i] = int(tmp[i])
-                res.append(tmp)
-            except Exception as e:
-                pass #ignores lines that have an '?'
-    return res
 
 def getData(fileName):
     res = []
