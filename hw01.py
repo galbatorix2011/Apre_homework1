@@ -15,11 +15,11 @@ import matplotlib.pyplot as plt
 
 def getVectors(indice):
     res = []
-    for line in traningData:
+    for line in data:
         res.append(line[indice])
     return res
 
-def getTrainingData(fileName):
+def getData(fileName):
     res = []
     #Reads the file
     with open(fileName) as f: 
@@ -27,7 +27,7 @@ def getTrainingData(fileName):
     #Formats all lines
     for line in lines:
         tmp = line[:-1].split(",") #removes the /n from the end of each line
-        for i in range(len(tmp) - 1):
+        for i in range(len(tmp) - 1): #does not check the last element cause its not an int
             try: #Truns every str into int
                 tmp[i] = int(tmp[i])
                 res.append(tmp)
@@ -37,7 +37,7 @@ def getTrainingData(fileName):
 
 # ------------------------------Global-Variables---------------------------
 
-traningData = getTrainingData("almeida.txt") #Training Data Stored
+data = getData("TrainingData.txt") #Training Data Stored
 
 #Atrributes
 titles = ["Clump Thickness", "Cell Size Uniformity", "Cell Shape Uniformity", "Marginal Adhesion", "Single Epi Cell Size", \
@@ -62,3 +62,4 @@ for i in range(len(ast)):
 
 
 plt.show()
+
