@@ -5,7 +5,11 @@ from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
 # --------------------------------Functions-----------------------------
 
-
+def getVectors(data,indice):
+    res = []
+    for line in data:
+        res.append(line[indice])
+    return res
 
 def getData(fileName):
     res = []
@@ -33,15 +37,34 @@ def divideData(data):
     
     return (benign, malign)
 
-def getProbs(data):
-    probs = []
-    count = 0
-    for i in range(len(data) - 1):
-        for j in range(11):
-            
-        
+def getProbs(data, residualValue):
+    res = []
+    for i in range(8): #Features
+        tmp = []
+        values = getVectors(data, i)
+        for j in range(1,11):
+            count = values.count(j)
+            tmp.append( (count /len(values)) if count != 0 else residualValue ) 
+        res.append(tmp)
+    return res
+
+def getPrediction(point, benProbs, malProbs): #[2,5,1,7]
+    benProbTemp = len(benProbs) / (len(benProbs)+len(malProbs))
+    malProbTemp = len(malProbs) / (len(benProbs)+len(malProbs))
+    for i in range(len(point)):
+        benProbTemp *= benProbs[i][point[i]]
+        malProbTemp *= benProbs[i][point[i]]
+    return "benign" if benProbTemp >= malProbTemp else "malignant"
+
+
+residualValue = 0.0000001
 
 data = getData("TrainingData.txt") #Training Data Stored
 
 ben, mal = divideData(data)
 
+
+benProbs = getProbs(ben, residualValue)
+malProbs = getProbs(mal,residualValue)
+
+print(getPrediction([1,1,1,1,1,1,1], benProbs, malProbs))
