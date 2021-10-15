@@ -3,6 +3,7 @@ import math
 from matplotlib.pyplot import clf
 from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
+import random
 # --------------------------------Functions-----------------------------
 
 def getVectors(data,indice):
@@ -52,8 +53,8 @@ def getPrediction(point, benProbs, malProbs): #[2,5,1,7]
     benProbTemp = len(benProbs) / (len(benProbs)+len(malProbs))
     malProbTemp = len(malProbs) / (len(benProbs)+len(malProbs))
     for i in range(len(point)):
-        benProbTemp *= benProbs[i][point[i]]
-        malProbTemp *= benProbs[i][point[i]]
+        benProbTemp *= benProbs[i][point[i]-1]
+        malProbTemp *= benProbs[i][point[i]-1]
     return "benign" if benProbTemp >= malProbTemp else "malignant"
 
 
@@ -67,4 +68,12 @@ ben, mal = divideData(data)
 benProbs = getProbs(ben, residualValue)
 malProbs = getProbs(mal,residualValue)
 
-print(getPrediction([1,1,1,1,1,1,1], benProbs, malProbs))
+
+
+x = input(": ")
+
+for i in range(int(x)):
+    test = [random.randint(1,10) for i in range(7)]
+    print(getPrediction(test, benProbs, malProbs))
+
+
