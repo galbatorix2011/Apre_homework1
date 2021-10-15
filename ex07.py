@@ -44,18 +44,27 @@ def getProbs(data, residualValue):
         values = getVectors(data, i)
         for j in range(1,11):
             count = values.count(j)
-            tmp.append( (count /len(values)) if count != 0 else residualValue  )
+            tmp.append( (count /len(values)) if count != 0 else residualValue ) 
         res.append(tmp)
     return res
-            
-        
+
+def getPrediction(point, benProbs, malProbs): #[2,5,1,7]
+    benProbTemp = len(benProbs) / (len(benProbs)+len(malProbs))
+    malProbTemp = len(malProbs) / (len(benProbs)+len(malProbs))
+    for i in range(len(point)):
+        benProbTemp *= benProbs[i][point[i]]
+        malProbTemp *= benProbs[i][point[i]]
+    return "benign" if benProbTemp >= malProbTemp else "malignant"
+
+
+residualValue = 0.0000001
 
 data = getData("TrainingData.txt") #Training Data Stored
 
 ben, mal = divideData(data)
 
 
-for i in getProbs(ben, 0.0000001):
-    print(i)
-    print("")
+benProbs = getProbs(ben, residualValue)
+malProbs = getProbs(mal,residualValue)
 
+print(getPrediction([1,1,1,1,1,1,1], benProbs, malProbs))
