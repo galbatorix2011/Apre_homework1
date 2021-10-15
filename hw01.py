@@ -50,13 +50,11 @@ fig.canvas.set_window_title('AP HW01 G132') # Window Title
 
 #Setting the titles
 for i in range(len(ast)):
-
     vectors = getVectors(i)
     ast[i].title.set_text(titles[i])
-    ast[i].set_ylabel("Amount")
+    ast[i].set_ylabel("Count")
     ast[i].set_xlabel("Value")
-    ast[i].hist(vectors, 4, density = True, edgecolor='red')
-
+    ast[i].hist(vectors, 4, density = False, edgecolor='red')
 
 plt.show()
 
