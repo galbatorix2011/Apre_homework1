@@ -9,9 +9,9 @@ Duarte Elvas 98564
 """
 # ---------------------------------Imports------------------------------
 import math
-import numpy as np
-from sklearn.model_selection import train_test_split
+from matplotlib.pyplot import clf
 from sklearn.model_selection import KFold
+from sklearn.naive_bayes import MultinomialNB
 # --------------------------------Functions-----------------------------
 
 
@@ -119,5 +119,12 @@ for point in data:
     if getClassification(point, indexes) == pointClass:
         oi += 1
 
-
 print('Accuracy1 treino = ' + str(oi / ola))
+
+mnb = MultinomialNB()
+
+mnb.fit(train_index, test_index)
+
+print(mnb.predict(test_index))
+
+
