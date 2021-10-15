@@ -76,6 +76,3 @@ for i in range(len(ast)):
 
 
 plt.show()
-
-
-
