@@ -59,12 +59,16 @@ def getKnn(point1, indexes):
                     nns[i][1] = point2
                     empty -= 1
                     break
-        else:
+        else:   
+            maxDist = -1 
+            index = -1
             for i in range(len(nns)):
-                if dist < nns[i][0]:
-                    nns[i][0] = dist
-                    nns[i][1] = point2
-                    break
+                if dist < nns[i][0] and nns[i][0] > maxDist:
+                    maxDist = nns[i][0]
+                    index = i
+            if maxDist != -1:
+                nns[index][0] = dist
+                nns[index][1] = point2
     return nns
 
 
@@ -121,10 +125,6 @@ for point in data:
 
 print('Accuracy1 treino = ' + str(oi / ola))
 
-mnb = MultinomialNB()
 
-mnb.fit(train_index, test_index)
-
-print(mnb.predict(test_index))
 
 
