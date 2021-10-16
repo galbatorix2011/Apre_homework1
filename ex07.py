@@ -54,8 +54,8 @@ def getPrediction(point, benProbs, malProbs): #[2,5,1,7]
     malProbTemp = len(malProbs) / (len(benProbs)+len(malProbs))
     for i in range(len(point)):
         benProbTemp *= benProbs[i][point[i]-1]
-        malProbTemp *= benProbs[i][point[i]-1]
-    return "benign" if benProbTemp >= malProbTemp else "malignant"
+        malProbTemp *= malProbs[i][point[i]-1]
+    return "benign" if benProbTemp > malProbTemp else "malignant"
 
 
 residualValue = 0.0000001
