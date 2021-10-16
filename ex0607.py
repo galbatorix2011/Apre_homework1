@@ -170,7 +170,7 @@ for train_index, test_index in kf.split(data):
             numRightClassifications += 1
     NaiveBayesAccuracies.append( numRightClassifications / numClassifications)
 
-print("accuracy naive bayes: " + str(getTotalAccuracy(NaiveBayesAccuracies)))
+print("Accuracy naive bayes: " + str(getTotalAccuracy(NaiveBayesAccuracies)))
 
 pValue = stats.ttest_ind(np.array(accuracies), np.array(NaiveBayesAccuracies), alternative='greater')
-print("p-value: " + str(pValue[1]))
+print("Pvalue: "+ str(pValue[1]))
