@@ -73,7 +73,7 @@ for i in range(len(ast)):
     ast[i].set_ylabel("Count")
     ast[i].set_xlabel("Value")
     ast[i].hist( [vectorsB, vectorsM], 10, density = False, histtype='bar', color=colors, label=["Benign", "Malignant"])
-    ast[i].legend()
+    ast[i].legend(prop={'size': 9})
 
 
 plt.show()
