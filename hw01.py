@@ -62,6 +62,7 @@ fig.tight_layout(pad=4.0) # spacing
 ast=fig.axes # getting a list with the axes
 fig.canvas.set_window_title('AP HW01 G132') # Window Title
 
+colors = ['green', 'red']
 
 #Setting the titles
 for i in range(len(ast)):
@@ -71,8 +72,8 @@ for i in range(len(ast)):
     ast[i].title.set_text(titles[i])
     ast[i].set_ylabel("Count")
     ast[i].set_xlabel("Value")
-    ast[i].legend(['benign', 'malignant'])
-    ast[i].hist( [vectorsB, vectorsM], 4, density = False)
+    ast[i].hist( [vectorsB, vectorsM], 10, density = False, histtype='bar', color=colors, label=["Benign", "Malignant"])
+    ast[i].legend()
 
 
 plt.show()
