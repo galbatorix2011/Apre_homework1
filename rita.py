@@ -11,7 +11,7 @@ def main():
     y3 = eval(input("y3: "))
     y4 = eval(input("y4: "))
     
-    pY1 = norm.pdf(y1, loc=0.25, scale=0.2380) if c == 0 else norm.pdf(y1, loc=0.05, scale=0.243)
+    pY1 = norm.pdf(y1, loc=0.25, scale=0.2380) if c == 0 else norm.pdf(y1, loc=0.05, scale=0.2881)
     if c == 0:
         pY2 = 0.5 if y2 == 0 else 0.25 if y2 == 1 else 0.25
     else:
@@ -19,8 +19,7 @@ def main():
     var0 = multivariate_normal([0.20, 0.25], [ [0.18, 0.18], [0.18,0.25] ] )
     var1 = multivariate_normal([0.117,0.083], [[0.1097,0.1223],[0.1223,0.2137]])
     pY3Y4 = var0.pdf([y3,y4]) if c == 0 else var1.pdf([y3,y4])
-    var3 = multivariate_normal([0.20, 0.25], [ [0.18, 0.18], [0.18,0.25] ] )
-    print(var0.pdf([0.2,0.4]))
+    print(pC*pY1*pY2*pY3Y4)
 
 
 if __name__ == "__main__":
