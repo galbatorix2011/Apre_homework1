@@ -13,7 +13,6 @@ from matplotlib.pyplot import clf
 from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
 from scipy import stats
-from scipy.stats import norm
 import numpy as np
 # -------------------------------- naive bayes Functions-----------------------------
 
@@ -149,12 +148,11 @@ for train_index, test_index in kf.split(data):
             rightTrain += 1
     trainAccuracies.append(rightTrain / totalTrain)
 
-print("Accuracy de teste: " + str(getTotalAccuracy(accuracies)))
-print("Accuracy de treino: " + str(getTotalAccuracy(trainAccuracies)))
+print("Accuracy de teste knn: " + str(getTotalAccuracy(accuracies)))
+print("Accuracy de treino knn: " + str(getTotalAccuracy(trainAccuracies)))
 
 kf = KFold(n_splits=10, random_state=132, shuffle=True)
 NaiveBayesAccuracies = []
-
 
 for train_index, test_index in kf.split(data):
     numClassifications = len(test_index)
