@@ -39,41 +39,52 @@ def divideData(data):
     return (benign, malign)
 
 def getProbs(data, residualValue):
-    res = []
-    for i in range(8): #Features
+    res = [] # each line will have a list with the different probabilities of that feature
+    for i in range(9): #Features
         tmp = []
         values = getVectors(data, i)
         for j in range(1,11):
             count = values.count(j)
-            tmp.append( (count /len(values)) if count != 0 else residualValue ) 
+            tmp.append((count / len(values)) if count != 0 else residualValue) 
         res.append(tmp)
     return res
 
-def getPrediction(point, benProbs, malProbs): #[2,5,1,7]
-    benProbTemp = len(benProbs) / (len(benProbs)+len(malProbs))
-    malProbTemp = len(malProbs) / (len(benProbs)+len(malProbs))
-    for i in range(len(point)):
-        benProbTemp *= benProbs[i][point[i]-1]
-        malProbTemp *= malProbs[i][point[i]-1]
-    return "benign" if benProbTemp > malProbTemp else "malignant"
+def getClassification(point, benProbs, malProbs): #[2,5,1,7]
+    benProbTemp = len(benProbs) / (len(benProbs) + len(malProbs))
+    malProbTemp = len(malProbs) / (len(benProbs) + len(malProbs))
+    for i in range(len(point) - 1):
+        benProbTemp *= benProbs[i][point[i] - 1]
+        malProbTemp *= malProbs[i][point[i] - 1]
+    return "benign" if benProbTemp >= malProbTemp else "malignant"
 
 
 residualValue = 0.0000001
 
 data = getData("TrainingData.txt") #Training Data Stored
 
-ben, mal = divideData(data)
+kf = KFold(n_splits=10, random_state=132, shuffle=True)
+accuracies = []
 
 
-benProbs = getProbs(ben, residualValue)
-malProbs = getProbs(mal,residualValue)
+for train_index, test_index in kf.split(data):
+    # print(test_index)
+    numClassifications = len(test_index)
+    numRightClassifications = 0
 
+    trainingData = [data[i] for i in train_index]
+    ben, mal = divideData(trainingData)
+    benProbs = getProbs(ben, 0)
+    malProbs = getProbs(mal, 0)
 
+    for index in test_index:
+        point = data[index]
+        pointClass = point[-1]
+        if getClassification(point, benProbs, malProbs) == pointClass:
+            numRightClassifications += 1
+    accuracies.append( numRightClassifications / numClassifications)
 
-x = input(": ")
-
-for i in range(int(x)):
-    test = [random.randint(1,10) for i in range(7)]
-    print(getPrediction(test, benProbs, malProbs))
-
-
+print(accuracies)
+smm = 0
+for x in accuracies:
+    smm += x
+print(str(smm/len(accuracies)))
