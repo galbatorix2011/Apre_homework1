@@ -9,7 +9,6 @@ Duarte Elvas 98564
 """
 # ---------------------------------Imports------------------------------
 import math
-from matplotlib.pyplot import clf
 from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
 from scipy import stats
@@ -71,6 +70,27 @@ def getData(fileName):
                     for i in range(len(tmp))])
     return res
 
+
+
+def naiveDivide(data):
+    X = []
+    y = []
+    for line in data:
+        X.append(line[:-1])
+        y.append(line[-1])
+    return (X, y)
+
+def getNaivePrediction(trainData, testData):
+    count = 0
+    trainX, trainY = naiveDivide(trainData)
+    testX, testY = naiveDivide(testData)
+    clf = MultinomialNB()
+    clf.fit(trainX, trainY) #train    
+    predictions = clf.predict(testX)
+    for i in range(len(predictions)):
+        if (predictions[i] == testY):
+            count += 1
+    return count/len(testData)
 # ------------------------------Global-Variables---------------------------
 
 
@@ -156,20 +176,9 @@ kf = KFold(n_splits=10, random_state=132, shuffle=True)
 NaiveBayesAccuracies = []
 
 for train_index, test_index in kf.split(data):
-    numClassifications = len(test_index)
-    numRightClassifications = 0
-
     trainingData = [data[i] for i in train_index]
-    ben, mal = divideData(trainingData)
-    benProbs = getProbs(ben, 0)
-    malProbs = getProbs(mal, 0)
-
-    for index in test_index:
-        point = data[index]
-        pointClass = point[-1]
-        if getClassificationNaiveBayes(point, benProbs, malProbs) == pointClass:
-            numRightClassifications += 1
-    NaiveBayesAccuracies.append( numRightClassifications / numClassifications)
+    testData = [data[i] for i in test_index]
+    NaiveBayesAccuracies.append(getNaivePrediction(trainingData,testData))
 
 print("Accuracy naive bayes: " + str(getTotalAccuracy(NaiveBayesAccuracies)))
 
