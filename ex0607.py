@@ -150,6 +150,7 @@ for train_index, test_index in kf.split(data):
 
 print("Accuracy de teste knn: " + str(getTotalAccuracy(accuracies)))
 print("Accuracy de treino knn: " + str(getTotalAccuracy(trainAccuracies)))
+print("diff: " + str(getTotalAccuracy(trainAccuracies) - getTotalAccuracy(accuracies)))
 
 kf = KFold(n_splits=10, random_state=132, shuffle=True)
 NaiveBayesAccuracies = []
@@ -172,5 +173,5 @@ for train_index, test_index in kf.split(data):
 
 print("Accuracy naive bayes: " + str(getTotalAccuracy(NaiveBayesAccuracies)))
 
-pValue = stats.ttest_ind(np.array(accuracies), np.array(NaiveBayesAccuracies), alternative='greater')
-print("Pvalue: "+ str(pValue[1]))
+pValue = stats.ttest_ind(np.array(accuracies), np.array(NaiveBayesAccuracies), alternative='less')
+print("Pvalue: "+ str(pValue))
