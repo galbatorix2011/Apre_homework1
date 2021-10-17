@@ -42,7 +42,9 @@ def mercyCovas(index1, index2, data, mean1, mean2):
 
 def getProbsY1(y1, data):
     mean = getMean(0, data)
+    print("media de y1: " + str(mean))
     deviation = getDesvio(0, data, mean)
+    print("desvio padrao de y1: " + str(deviation))
     return norm.pdf(y1, loc=mean, scale=deviation)
 
 def getProbsY2(y1):
@@ -52,10 +54,12 @@ def getProbsY3Y4(y3, y4, data):
     meanY3 = getMean(2, data)
     meanY4 = getMean(3, data)
     means = [meanY3, meanY4]
+    print("media de y4: " + str(means))
     e00 = mercyCovas(2, 2, data, meanY3, meanY3)
     e01 = mercyCovas(2, 3, data, meanY3, meanY4)
     e11 = mercyCovas(3, 3, data, meanY4, meanY4)
     covs = [[e00, e01], [e01, e11]]
+    print("desvios padrao de y3: " + str(covs))
     return multivariate_normal(means, covs).pdf([y3, y4])
 
 def getClassifcation(y1, y2, y3, y4, threshold, data):
