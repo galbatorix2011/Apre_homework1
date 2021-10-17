@@ -122,7 +122,7 @@ def getClassificationKnn(point, indexes):
 def getTotalAccuracy(accuracies):
     return sum(accuracies) / len(accuracies)
 
-data = getData("TrainingData.txt")  # Training Data Stored
+data = getData("data.txt")  # Training Data Stored
 k = int(input('k: '))
 
 kf = KFold(n_splits=10, random_state=132, shuffle=True)
