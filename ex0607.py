@@ -14,13 +14,13 @@ from sklearn.naive_bayes import MultinomialNB
 from scipy import stats
 import numpy as np
 # --------------------------------Functions-----------------------------
-def getVectors(data,indice):
+def getVectors(data,indice): #Returns the vectors for a single value
     res = []
     for line in data:
         res.append(line[indice])
     return res
 
-def getData(fileName):
+def getData(fileName): #Converts the data in a .txt file to an array
     res = []
     # Reads the file
     with open(fileName) as f:
@@ -34,7 +34,7 @@ def getData(fileName):
                     for i in range(len(tmp))])
     return res
 
-def naiveDivide(data):
+def naiveDivide(data): #will divide the data in order to be processed by the MultinomialNB function
     X = []
     y = []
     for line in data:
@@ -42,7 +42,7 @@ def naiveDivide(data):
         y.append(line[-1])
     return (X, y)
 
-def getNaivePrediction(trainData, testData):
+def getNaivePrediction(trainData, testData): # Will fit and predict based on the Naive Bayes algorithm
     count = 0
     trainX, trainY = naiveDivide(trainData)
     testX, testY = naiveDivide(testData)
@@ -53,11 +53,8 @@ def getNaivePrediction(trainData, testData):
         if (predictions[i] == testY[i]):
             count += 1
     return count/len(testData)
-# ------------------------------Global-Variables---------------------------
-def getDistance(point1, point2):
-    return math.dist(point1, point2)
 
-def getKnn(point1, indexes):
+def getKnn(point1, indexes): # Will fit and predict based on the KNN algorith
     nns = [[-1, -1] for i in range(k)]  # -1 when there is nothing there
     points = [data[i] for i in indexes]
     empty = k
@@ -83,7 +80,7 @@ def getKnn(point1, indexes):
     return nns
 
 
-def getClassificationKnn(point, indexes):
+def getClassificationKnn(point, indexes): #Will end the Knn algorithm
     nns = getKnn(point, indexes)
     neighbours = [element[1][-1] for element in nns]
     numMalignant = 0
@@ -95,17 +92,19 @@ def getClassificationKnn(point, indexes):
             numBenign += 1
     return 'malignant' if numMalignant > numBenign else 'benign'
 
-def getTotalAccuracy(accuracies):
+def getTotalAccuracy(accuracies): #Returns the accuracies
     return sum(accuracies) / len(accuracies)
 
+#---------------------------------Main------------------------------------------------------------
+
 data = getData("data.txt")  # Training Data Stored
-k = int(input('k: '))
+k = int(input('k: ')) #K Input
 
-kf = KFold(n_splits=10, random_state=132, shuffle=True)
-accuracies = []
-trainAccuracies = []
-
-for train_index, test_index in kf.split(data):
+kf = KFold(n_splits=10, random_state=132, shuffle=True) #Kfold  where the data is divided in Training and Testing
+accuracies = [] #Stores the final accuracies
+trainAccuracies = [] #Stores the train Accuracies
+#----------------------------------------Knn---------------------------------------------------------
+for train_index, test_index in kf.split(data): #Main for looop
     numClassifications = len(test_index)
     numRightClassifications = 0
     for index in test_index:
@@ -127,11 +126,11 @@ for train_index, test_index in kf.split(data):
 print("Accuracy de teste knn: " + str(getTotalAccuracy(accuracies)))
 print("Accuracy de treino knn: " + str(getTotalAccuracy(trainAccuracies)))
 print("diff: " + str(getTotalAccuracy(trainAccuracies) - getTotalAccuracy(accuracies)))
-
+#------------------------------------Naive-Bayes----------------------------------------------------
 kf = KFold(n_splits=10, random_state=132, shuffle=True)
 NaiveBayesAccuracies = []
 
-for train_index, test_index in kf.split(data):
+for train_index, test_index in kf.split(data): #Main for Loop
     trainingData = [data[i] for i in train_index]
     testData = [data[i] for i in test_index]
     NaiveBayesAccuracies.append(getNaivePrediction(trainingData,testData))
