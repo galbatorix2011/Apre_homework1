@@ -88,7 +88,7 @@ def getNaivePrediction(trainData, testData):
     clf.fit(trainX, trainY) #train    
     predictions = clf.predict(testX)
     for i in range(len(predictions)):
-        if (predictions[i] == testY):
+        if (predictions[i] == testY[i]):
             count += 1
     return count/len(testData)
 # ------------------------------Global-Variables---------------------------
@@ -182,5 +182,5 @@ for train_index, test_index in kf.split(data):
 
 print("Accuracy naive bayes: " + str(getTotalAccuracy(NaiveBayesAccuracies)))
 
-pValue = stats.ttest_ind(np.array(accuracies), np.array(NaiveBayesAccuracies), alternative='less')
+pValue = stats.ttest_rel(np.array(NaiveBayesAccuracies), np.array(accuracies), alternative='greater')
 print("Pvalue: "+ str(pValue))
