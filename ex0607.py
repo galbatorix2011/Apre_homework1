@@ -13,48 +13,12 @@ from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
 from scipy import stats
 import numpy as np
-# -------------------------------- naive bayes Functions-----------------------------
-
-def divideData(data):
-    benign = []
-    malign = []
-
-    for line in data:
-        if line[-1] == "benign":
-            benign.append(line)
-        else:
-            malign.append(line)
-    
-    return (benign, malign)
-
-def getProbs(data, residualValue):
-    res = [] # each line will have a list with the different probabilities of that feature
-    for i in range(9): #Features
-        tmp = []
-        values = getVectors(data, i)
-        for j in range(1,11):
-            count = values.count(j)
-            tmp.append((count / len(values)) if count != 0 else residualValue) 
-        res.append(tmp)
-    return res
-
-def getClassificationNaiveBayes(point, benProbs, malProbs): #[2,5,1,7]
-    benProbTemp = len(benProbs) / (len(benProbs) + len(malProbs))
-    malProbTemp = len(malProbs) / (len(benProbs) + len(malProbs))
-    for i in range(len(point) - 1):
-        benProbTemp *= benProbs[i][point[i] - 1]
-        malProbTemp *= malProbs[i][point[i] - 1]
-    return "benign" if benProbTemp >= malProbTemp else "malignant"
-
 # --------------------------------Functions-----------------------------
-
-
 def getVectors(data,indice):
     res = []
     for line in data:
         res.append(line[indice])
     return res
-
 
 def getData(fileName):
     res = []
@@ -69,8 +33,6 @@ def getData(fileName):
         res.append([int(tmp[i]) if i < len(tmp) - 1 else tmp[i]
                     for i in range(len(tmp))])
     return res
-
-
 
 def naiveDivide(data):
     X = []
@@ -92,14 +54,8 @@ def getNaivePrediction(trainData, testData):
             count += 1
     return count/len(testData)
 # ------------------------------Global-Variables---------------------------
-
-
 def getDistance(point1, point2):
-    sum = 0
-    for i in range(0, len(point1) - 1):
-        sum += (point1[i] - point2[i])**2
-    return math.sqrt(sum)
-
+    return math.dist(point1, point2)
 
 def getKnn(point1, indexes):
     nns = [[-1, -1] for i in range(k)]  # -1 when there is nothing there
