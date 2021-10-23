@@ -44,10 +44,9 @@ for i in [1,3,5,9]:
 
         ftrainingDataIn = selection.transform(trainingDataIn)
         ftestDataIn = selection.transform(testDataIn)
-        #print(ftestDataIn)
-        clfFeatures = tree.DecisionTreeClassifier(max_depth=None, criterion="entropy", max_features=None) 
+        clfFeatures = tree.DecisionTreeClassifier(max_depth=None, max_features=None) 
 
-        clfDepth = tree.DecisionTreeClassifier(max_depth=i, criterion="entropy", max_features=None)
+        clfDepth = tree.DecisionTreeClassifier(max_depth=i, max_features=None)
         
         clfFeatures.fit(ftrainingDataIn, trainingDataOut)
         clfDepth.fit(trainingDataIn, trainingDataOut)
@@ -64,6 +63,7 @@ for i in [1,3,5,9]:
         accuracyTest = sum([1 if predictionsFeaturesTest[i] == testDataOut[i] else 0 for i in range(len(predictionsFeaturesTest))]) / len(predictionsFeaturesTest)
         accuracyTrain = sum([1 if predictionsFeaturesTrain[i] == trainingDataOut[i] else 0 for i in range(len(predictionsFeaturesTrain))]) / len(predictionsFeaturesTrain)
         accuraciesFeatures.append((accuracyTest, accuracyTrain))
+
     accuracyFeatures.append((getMeanAccuracy([accuraciesFeatures[i][0] for i in range(len(accuraciesFeatures))]),
         getMeanAccuracy([accuraciesFeatures[i][1] for i in range(len(accuraciesFeatures))])))
     accuracyDepth.append((getMeanAccuracy([accuraciesDepth[i][0] for i in range(len(accuraciesDepth))]),
@@ -74,16 +74,18 @@ print(accuracyFeatures)
 
 
 
-#duarte corrige isto pah
 x = [1, 3, 5, 9]
 yDepthTest = [accuracy[0] for accuracy in accuracyDepth] 
 yDepthTrain = [accuracy[1] for accuracy in accuracyDepth] 
 yFeaturesTest = [accuracy[0] for accuracy in accuracyFeatures] 
 yFeaturesTrain = [accuracy[1] for accuracy in accuracyFeatures]
-plt.plot(x, yDepthTest, label = "depth Test")
-plt.plot(x, yDepthTrain, label = "depth Train")
-plt.plot(x, yFeaturesTest, label = "features Test")
-plt.plot(x, yFeaturesTrain, label = "features Train")
+plt.figure('AP HW02 G132')  # Window Title
+plt.plot(x, yDepthTest,"-o", label = "depth Test")
+plt.plot(x, yDepthTrain,"-o",label = "depth Train")
+plt.plot(x, yFeaturesTest,"-s", label = "features Test")
+plt.plot(x, yFeaturesTrain,"-s", label = "features Train")
+plt.ylabel("Accuracies")
+plt.xlabel("Depth")
 plt.legend()
 plt.show()
 
