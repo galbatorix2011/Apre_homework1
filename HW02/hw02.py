@@ -29,12 +29,19 @@ k = int(input('k: ')) #K Input
 kf = KFold(n_splits=10, random_state=132, shuffle=True)
 
 
+trainAccuracies = []
 for i in [1,3,5,9]:
+    res = []
     for train_index, test_index in kf.split(data): #Main for Loop
         trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
-        testData = [data[i] for i in test_index]
+        testDataIn , testDataOut = divide([data[i] for i in test_index])
         clfFeatures = tree.DecisionTreeClassifier(max_depth=None, criterion="entropy", max_features= i) 
         clfDepth = tree.DecisionTreeClassifier(max_depth=i, criterion="entropy", max_features=None)
         
         clfFeatures.fit(trainingDataIn, trainingDataOut)
         clfDepth.fit(trainingDataIn, trainingDataOut)
+
+        clfFeatures.predict(testDataIn)
+
+
+
