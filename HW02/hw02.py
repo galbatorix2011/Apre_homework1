@@ -12,6 +12,8 @@ def getData(fileName):  # Converts the data in a .txt file to an array
     # Formats all lines
     for line in lines:
         tmp = line[:-1].split(",")
+        if tmp[-1] == "malignan":
+            tmp[-1] = "malignant"
         if '?' in line:
             continue
         res.append([int(tmp[i]) if i < len(tmp) - 1 else tmp[i]
