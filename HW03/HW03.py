@@ -1,3 +1,4 @@
+from scipy.sparse.sputils import matrix
 from sklearn import tree
 from sklearn.model_selection import KFold
 from sklearn.feature_selection import SelectKBest, mutual_info_classif
@@ -38,51 +39,53 @@ def getMeanAccuracy(accuracies):
 data = getData("data.txt")  # Training Data Stored
 kf = KFold(n_splits=5, random_state=0, shuffle=True)
 
-accuracys010 = []
-accuracys032 = []
-accuracys1 = []
-accuracys316 = []
-accuracys10 = []
 
+accuraciesEarlyStoping = []
+accuraciesNoEarlyStoping = []
 
+predictionsEarlyStoping = []
+predictionsNoEarlyStoping = []
+
+targets = []
 
 for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
     testDataIn, testDataOut = divide([data[i] for i in test_index])
+    
+    mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1)
+    mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1)
 
-    mlp010 = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 0.10)
-    mlp032 = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 0.32)
-    mlp1 = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1)
-    mlp316 = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 3.16)
-    mlp10 = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 10)
+    mlpEarlyStoping.fit(trainingDataIn, trainingDataOut)
+    mlpNoEarlyStoping.fit(trainingDataIn, trainingDataOut)
 
-    mlp010.fit(trainingDataIn, trainingDataOut)
-    mlp032.fit(trainingDataIn, trainingDataOut)
-    mlp1.fit(trainingDataIn, trainingDataOut)
-    mlp316.fit(trainingDataIn, trainingDataOut)
-    mlp10.fit(trainingDataIn, trainingDataOut)
+    predictionEarlyStop = mlpEarlyStoping.predict(testDataIn)
+    predictionNoEarlyStop = mlpNoEarlyStoping.predict(testDataIn)
 
-    prediction010 = mlp010.predict(testDataIn)
-    prediction032 = mlp032.predict(testDataIn)
-    prediction1 = mlp1.predict(testDataIn)
-    prediction316 = mlp316.predict(testDataIn)
-    prediction10 = mlp10.predict(testDataIn)
+    for i in predictionEarlyStop:
+        predictionsEarlyStoping.append(i)
+    for j in mlpNoEarlyStoping.predict(testDataIn):
+        predictionsNoEarlyStoping.append(j)
+    
+    for target in testDataOut:
+        targets.append(target)
 
-    accuracys010.append(getAccuracy(prediction010, testDataOut))
-    accuracys032.append(getAccuracy(prediction032, testDataOut))
-    accuracys1.append(getAccuracy(prediction1, testDataOut))
-    accuracys316.append(getAccuracy(prediction316, testDataOut))
-    accuracys10.append(getAccuracy(prediction10, testDataOut))
+    accuraciesEarlyStoping.append(getAccuracy(predictionEarlyStop, testDataOut))
+    accuraciesNoEarlyStoping.append(getAccuracy(predictionNoEarlyStop, testDataOut))
 
+print("#-" * 30) 
 
+print("NoEarlyStoping Accuracy----> " + str(getMeanAccuracy(accuraciesNoEarlyStoping)))
+confusionNoEarlyStoping = confusion_matrix(targets, predictionsNoEarlyStoping, labels=["benign","malignant"])
+print(confusionNoEarlyStoping)
 
+print("")
 
-print("0.010 --> " + str(getMeanAccuracy(accuracys010)))
-print("0.32 --> " + str(getMeanAccuracy(accuracys032)))
-print("1 --> " + str(getMeanAccuracy(accuracys1)))
-print("3.16 --> " + str(getMeanAccuracy(accuracys316)))
-print("10 --> " + str(getMeanAccuracy(accuracys10)))
-#print(matrix)
+print("EarlyStoping Accuracy----> " + str(getMeanAccuracy(accuraciesEarlyStoping)))
+confusionEarlyStoping = confusion_matrix(targets, predictionsEarlyStoping, labels=["benign","malignant"])
+print(confusionEarlyStoping)
+
+print("#-" * 30) 
+
 
 
 
