@@ -1,5 +1,3 @@
-from scipy.sparse.sputils import matrix
-from sklearn import tree
 from sklearn.model_selection import KFold
 from sklearn.feature_selection import SelectKBest, mutual_info_classif
 from sklearn.neural_network import MLPClassifier
@@ -69,14 +67,6 @@ for train_index, test_index in kf.split(data):
 
     accuraciesEarlyStoping.append(getAccuracy(predictionEarlyStop, testDataOut))
     accuraciesNoEarlyStoping.append(getAccuracy(predictionNoEarlyStop, testDataOut))
-
-for i in range(len(targets)):
-    if targets[i] != "benign" and targets[i] != "malignant":
-        print(i)
-
-print(len(predictionsEarlyStoping))
-print("#-" * 30)
-print(len(targets))
 
 print("#-" * 30) 
 
