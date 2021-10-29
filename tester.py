@@ -2,6 +2,7 @@ from numpy import array
 from scipy.io import arff
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_val_score
 from sklearn.neural_network import MLPClassifier
 import random
@@ -26,9 +27,12 @@ def getMeanAccuracy(accuracies):
 
 data = [list(e) for e in arff.loadarff("kin8nm.arff")[0]]
 
-clf = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1)
+clfReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1)
+clfNoReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 0)
 
-predictions = []
+predictionsReg = []
+predictionsNoReg = []
+
 targets = []
 
 kf = KFold(n_splits=5, random_state=0, shuffle=True)
@@ -37,13 +41,19 @@ for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
     testDataIn, testDataOut = divide([data[i] for i in test_index])
 
-    clf.fit(trainingDataIn, trainingDataOut)
+    clfReg.fit(trainingDataIn, trainingDataOut)
+    clfNoReg.fit(trainingDataIn, trainingDataOut)
 
-    predictions += list(clf.predict(testDataIn))
+    predictionsReg += list(clfReg.predict(testDataIn))
+    predictionsNoReg += list(clfNoReg.predict(testDataIn))
+    
     targets += testDataOut
 
+residualsReg = [predictionsReg[i] - targets[i] for i in range(len(targets))]
+residualsNoReg = [predictionsNoReg[i] - targets[i] for i in range(len(targets))]
 
-
-print(getAccuracy(predictions, targets))
-
+plt.boxplot(residualsReg)
+plt.boxplot(residualsNoReg)
+ 
+plt.show()
 
