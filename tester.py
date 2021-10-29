@@ -27,8 +27,8 @@ def getMeanAccuracy(accuracies):
 
 data = [list(e) for e in arff.loadarff("kin8nm.arff")[0]]
 
-clfReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1)
-clfNoReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 0)
+clfReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1)
+clfNoReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 0)
 
 predictionsReg = []
 predictionsNoReg = []
@@ -53,8 +53,11 @@ residualsReg = [predictionsReg[i] - targets[i] for i in range(len(targets))]
 residualsNoReg = [predictionsNoReg[i] - targets[i] for i in range(len(targets))]
 
 
-plt.boxplot(residualsReg)
-plt.boxplot(residualsNoReg)
+fig = plt.figure(figsize =(10, 7))
  
+plt.boxplot([residualsReg,residualsNoReg])
+
+plt.xticks([1, 2], ["Residuals with Regularization", 'Residuals with no Regularization'])
+# show plot
 plt.show()
 
