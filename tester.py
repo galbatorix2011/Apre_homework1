@@ -52,6 +52,7 @@ for train_index, test_index in kf.split(data):
 residualsReg = [predictionsReg[i] - targets[i] for i in range(len(targets))]
 residualsNoReg = [predictionsNoReg[i] - targets[i] for i in range(len(targets))]
 
+
 plt.boxplot(residualsReg)
 plt.boxplot(residualsNoReg)
  
