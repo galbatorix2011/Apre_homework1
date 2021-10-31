@@ -47,7 +47,6 @@ predictionsEarlyStoping = []
 predictionsNoEarlyStoping = []
 
 targets = []
-
 for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
     testDataIn, testDataOut = divide([data[i] for i in test_index])
@@ -81,7 +80,5 @@ confusionEarlyStoping = confusion_matrix(targets, predictionsEarlyStoping)
 print(confusionEarlyStoping)
 
 print("#-" * 30) 
-
-
 
 
