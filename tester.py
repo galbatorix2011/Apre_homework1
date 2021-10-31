@@ -1,6 +1,5 @@
 from numpy import array
 from scipy.io import arff
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_val_score
@@ -24,12 +23,13 @@ def getAccuracy(predictions, real):
 def getMeanAccuracy(accuracies):
     return sum(accuracies) / len(accuracies)
 
+def sumSquaredErrors(predictions, targets):
+    return sum([(predictions[i] - targets[i])**2 for i in range(len(targets))])
 
 data = [list(e) for e in arff.loadarff("kin8nm.arff")[0]]
 
-clfReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1)
-clfNoReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 0)
-
+clfReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True,alpha = 0, random_state= 0)
+clfNoReg = MLPRegressor(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 0, random_state=0)
 predictionsReg = []
 predictionsNoReg = []
 
@@ -52,7 +52,8 @@ for train_index, test_index in kf.split(data):
 residualsReg = [predictionsReg[i] - targets[i] for i in range(len(targets))]
 residualsNoReg = [predictionsNoReg[i] - targets[i] for i in range(len(targets))]
 
-
+print(sumSquaredErrors(predictionsReg, targets))
+print(sumSquaredErrors(predictionsNoReg, targets))
 fig = plt.figure(figsize =(10, 7))
  
 plt.boxplot([residualsReg,residualsNoReg])
