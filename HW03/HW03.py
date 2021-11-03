@@ -40,22 +40,29 @@ data = getData("data.txt")  # Training Data Stored
 kf = KFold(n_splits=5, random_state=0, shuffle=True)
 
 
+predictionsTrainingData = []
+trainingTargets = []
+
 accuraciesEarlyStoping = []
 accuraciesNoEarlyStoping = []
 
 predictionsEarlyStoping = []
 predictionsNoEarlyStoping = []
 
+alpha = 55
 targets = []
 for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
     testDataIn, testDataOut = divide([data[i] for i in test_index])
 
-    mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1)
-    mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1)
+    mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = alpha, random_state=0)
+    mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = alpha, random_state=0)
 
     mlpEarlyStoping.fit(trainingDataIn, trainingDataOut)
     mlpNoEarlyStoping.fit(trainingDataIn, trainingDataOut)
+
+    predictionsTrainingData += list(mlpNoEarlyStoping.predict(trainingDataIn))
+    trainingTargets += trainingDataOut
 
     predictionEarlyStop = mlpEarlyStoping.predict(testDataIn)
     predictionNoEarlyStop = mlpNoEarlyStoping.predict(testDataIn)
@@ -66,6 +73,7 @@ for train_index, test_index in kf.split(data):
 
     accuraciesEarlyStoping.append(getAccuracy(predictionEarlyStop, testDataOut))
     accuraciesNoEarlyStoping.append(getAccuracy(predictionNoEarlyStop, testDataOut))
+
 
 print("#-" * 30) 
 
@@ -80,5 +88,7 @@ confusionEarlyStoping = confusion_matrix(targets, predictionsEarlyStoping)
 print(confusionEarlyStoping)
 
 print("#-" * 30) 
+
+print(f"Training No Early Stoping Accuracies----> " + str( getAccuracy(predictionsTrainingData, trainingTargets) ) ) 
 
 
