@@ -1,8 +1,5 @@
 from sklearn.model_selection import KFold
-from sklearn.feature_selection import SelectKBest, mutual_info_classif
 from sklearn.neural_network import MLPClassifier
-import matplotlib.pyplot as plt
-import numpy as np
 from sklearn.metrics import confusion_matrix
 
 def getData(fileName):  # Converts the data in a .txt file to an array
@@ -39,20 +36,25 @@ def getMeanAccuracy(accuracies):
 data = getData("../data.txt")  # Training Data Stored
 kf = KFold(n_splits=5, random_state=0, shuffle=True)
 
-
 accuraciesEarlyStoping = []
 accuraciesNoEarlyStoping = []
 
 predictionsEarlyStoping = []
 predictionsNoEarlyStoping = []
 
+alpha = 1
 targets = []
 for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
     testDataIn, testDataOut = divide([data[i] for i in test_index])
 
+<<<<<<< HEAD
     mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1, n_iter_no_change= 10000,max_iter=100000, random_state=0)
     mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1, random_state=0, max_iter= 100000)
+=======
+    mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = alpha, random_state=0)
+    mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = alpha, random_state=0)
+>>>>>>> 199d6caf76fc7d32c85ded7551b118d970c9433e
 
     mlpEarlyStoping.fit(trainingDataIn, trainingDataOut)
     mlpNoEarlyStoping.fit(trainingDataIn, trainingDataOut)
@@ -67,18 +69,15 @@ for train_index, test_index in kf.split(data):
     accuraciesEarlyStoping.append(getAccuracy(predictionEarlyStop, testDataOut))
     accuraciesNoEarlyStoping.append(getAccuracy(predictionNoEarlyStop, testDataOut))
 
-print("#-" * 30) 
+_, output = divide(data)
 
 print("NoEarlyStoping Accuracy----> " + str(getMeanAccuracy(accuraciesNoEarlyStoping)))
 confusionNoEarlyStoping = confusion_matrix(targets, predictionsNoEarlyStoping)
 print(confusionNoEarlyStoping)
 
-print("")
-
 print("EarlyStoping Accuracy----> " + str(getMeanAccuracy(accuraciesEarlyStoping)))
 confusionEarlyStoping = confusion_matrix(targets, predictionsEarlyStoping)
 print(confusionEarlyStoping)
 
-print("#-" * 30) 
 
 
