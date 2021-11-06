@@ -36,7 +36,7 @@ def getAccuracy(predictions, real):
 def getMeanAccuracy(accuracies):
     return sum(accuracies) / len(accuracies)
 
-data = getData("data.txt")  # Training Data Stored
+data = getData("../data.txt")  # Training Data Stored
 kf = KFold(n_splits=5, random_state=0, shuffle=True)
 
 
@@ -51,8 +51,8 @@ for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
     testDataIn, testDataOut = divide([data[i] for i in test_index])
 
-    mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1)
-    mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1)
+    mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1, n_iter_no_change= 10000,max_iter=100000, random_state=0)
+    mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1, random_state=0, max_iter= 100000)
 
     mlpEarlyStoping.fit(trainingDataIn, trainingDataOut)
     mlpNoEarlyStoping.fit(trainingDataIn, trainingDataOut)

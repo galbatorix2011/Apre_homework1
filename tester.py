@@ -27,9 +27,9 @@ def sumSquaredErrors(predictions, targets):
     return sum([(predictions[i] - targets[i])**2 for i in range(len(targets))])
 
 data = [list(e) for e in arff.loadarff("kin8nm.arff")[0]]
-hiddenLayers = [800,80,80,80,80]
-clfReg = MLPRegressor(hidden_layer_sizes= hiddenLayers,activation="relu", early_stopping=True, alpha = 0.0031, random_state=0)
-clfNoReg = MLPRegressor(hidden_layer_sizes=hiddenLayers,activation="relu", early_stopping=True, alpha = 0, random_state=0)
+hiddenLayers = [8,6,8]
+clfReg = MLPRegressor(hidden_layer_sizes= hiddenLayers,  activation="relu", alpha = 0.0031, learning_rate_init=0.004, early_stopping=True, random_state=0)
+clfNoReg = MLPRegressor(hidden_layer_sizes=hiddenLayers,  activation="relu", alpha = 0, random_state=0)
 
 predictionsReg = []
 predictionsNoReg = []
