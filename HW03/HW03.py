@@ -1,8 +1,5 @@
 from sklearn.model_selection import KFold
-from sklearn.feature_selection import SelectKBest, mutual_info_classif
 from sklearn.neural_network import MLPClassifier
-import matplotlib.pyplot as plt
-import numpy as np
 from sklearn.metrics import confusion_matrix
 
 def getData(fileName):  # Converts the data in a .txt file to an array
@@ -39,17 +36,13 @@ def getMeanAccuracy(accuracies):
 data = getData("data.txt")  # Training Data Stored
 kf = KFold(n_splits=5, random_state=0, shuffle=True)
 
-
-predictionsTrainingData = []
-trainingTargets = []
-
 accuraciesEarlyStoping = []
 accuraciesNoEarlyStoping = []
 
 predictionsEarlyStoping = []
 predictionsNoEarlyStoping = []
 
-alpha = 55
+alpha = 1
 targets = []
 for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
@@ -61,9 +54,6 @@ for train_index, test_index in kf.split(data):
     mlpEarlyStoping.fit(trainingDataIn, trainingDataOut)
     mlpNoEarlyStoping.fit(trainingDataIn, trainingDataOut)
 
-    predictionsTrainingData += list(mlpNoEarlyStoping.predict(trainingDataIn))
-    trainingTargets += trainingDataOut
-
     predictionEarlyStop = mlpEarlyStoping.predict(testDataIn)
     predictionNoEarlyStop = mlpNoEarlyStoping.predict(testDataIn)
 
@@ -74,21 +64,15 @@ for train_index, test_index in kf.split(data):
     accuraciesEarlyStoping.append(getAccuracy(predictionEarlyStop, testDataOut))
     accuraciesNoEarlyStoping.append(getAccuracy(predictionNoEarlyStop, testDataOut))
 
-
-print("#-" * 30) 
+_, output = divide(data)
 
 print("NoEarlyStoping Accuracy----> " + str(getMeanAccuracy(accuraciesNoEarlyStoping)))
 confusionNoEarlyStoping = confusion_matrix(targets, predictionsNoEarlyStoping)
 print(confusionNoEarlyStoping)
 
-print("")
-
 print("EarlyStoping Accuracy----> " + str(getMeanAccuracy(accuraciesEarlyStoping)))
 confusionEarlyStoping = confusion_matrix(targets, predictionsEarlyStoping)
 print(confusionEarlyStoping)
 
-print("#-" * 30) 
-
-print(f"Training No Early Stoping Accuracies----> " + str( getAccuracy(predictionsTrainingData, trainingTargets) ) ) 
 
 
