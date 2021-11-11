@@ -26,7 +26,7 @@ def getJointProbability(prior, normal):
 def getNormalizedProbability(jointXC1, jointXC2):
     return jointXC1 / (jointXC1 + jointXC2)
 
-x = x1
+x = x4
 
 print("-"*50+"\n")
 
