@@ -58,12 +58,42 @@ def getECRScore(dataOut, prediction, n):
                 c1Malignant +=1
             else:
                 c1Benign +=1
-
     c0Total = c0Benign + c0Malignant
+    print("c0: " + str(c0Total) )
     c1Total = c1Benign + c1Malignant
     return ((c0Total - max(c0Benign, c0Malignant)) + (c1Total - max(c1Benign, c1Malignant))) / n
     
+def getECRScore(dataOut, prediction, n):
+    c0Benign = 0
+    c0Malignant = 0
+    
+    c1Benign = 0
+    c1Malignant = 0
+    
+    c2Benign = 0
+    c2Malignant = 0
+    for i in range(len(prediction)):
+        if prediction[i] == 0:
+            if dataOut[i] == "malignant":
+                c0Malignant +=1
+            else:
+                c0Benign +=1
+        elif prediction[i] == 1:
+            if dataOut[i] == "malignant":
+                c1Malignant +=1
+            else:
+                c1Benign +=1
+        elif prediction[i] == 2:
+            if dataOut[i] == "malignant":
+                c2Malignant +=1
+            else:
+                c2Benign +=1
 
+    c0Total = c0Benign + c0Malignant
+    c1Total = c1Benign + c1Malignant
+    c2Total = c2Benign + c2Malignant
+    return ((c0Total - max(c0Benign, c0Malignant)) + (c1Total - max(c1Benign, c1Malignant)) + (c2Total - max(c2Benign, c2Malignant))) / n
+    
 data = getData("data.txt")  # Training Data Stored
 
 dataIn, dataOut = divide(data)
@@ -71,31 +101,18 @@ dataIn, dataOut = divide(data)
 
 newData = SelectKBest(mutual_info_classif, k=2).fit_transform(dataIn,dataOut)
 
-<<<<<<< HEAD
-#print(newData)
-
-kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
-kmeansK3 = KMeans(n_clusters=3, random_state=0, max_iter=20000).fit(newData)
-=======
-print(dataIn)
 
 kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
 kmeansK3s = KMeans(n_clusters=3, random_state=0).fit(dataIn)
 
 
 kmeansK3 = KMeans(n_clusters=3, random_state=0).fit(newData)
->>>>>>> fea395f4396b8db758e9d9af093786fac4c18952
 
 prediction = list(kmeans.labels_)
 predictionK3s = list(kmeansK3s.labels_)
 prediction2 = list(kmeansK3.labels_)
-<<<<<<< HEAD
-#print(getECRScore(dataOut, prediction))
-#print()
-x = silhouette_score(dataIn, prediction)
-=======
 print("ECR K2 ---> "+ str(getECRScore(dataOut, prediction, 2)))
-print("ECR K3 ---> "+ str(getECRScore(dataOut, predictionK3s, 2)))
+print("ECR K3 ---> "+ str(getECRScore(dataOut, predictionK3s, 3)))
 print()
 print("Silhouette K2 ---> "+ str(silhouette_score(dataIn, prediction)))
 print("Silhouette K3 ---> "+ str(silhouette_score(dataIn, predictionK3s)))
@@ -106,7 +123,6 @@ print("ECR 5 ---> "+ str(getECRScore(dataOut, prediction2, 3)))
 print("Silhouette 5 ---> "+ str(silhouette_score(dataIn, prediction2)))
 
       
->>>>>>> fea395f4396b8db758e9d9af093786fac4c18952
 
 
 
@@ -122,12 +138,6 @@ for i in range(len(prediction2)):
         cluster1.append(newData[i])
     else:
         cluster2.append(newData[i])
-print("cluster 0:")
-print([list(e) for e in cluster0])
-print("cluster 1:")
-print([list(e) for e in cluster1])
-print("cluster 2:")
-print([list(e) for e in cluster2])
 
 plt.scatter([i[0] for i in cluster0] , [i[1] for i in cluster0], color = "blue")
 
