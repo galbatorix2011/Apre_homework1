@@ -71,7 +71,7 @@ dataIn, dataOut = divide(data)
 
 newData = SelectKBest(mutual_info_classif, k=2).fit_transform(dataIn,dataOut)
 
-print(newData)
+print(dataIn)
 
 kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
 kmeansK3 = KMeans(n_clusters=3, random_state=0).fit(newData)
@@ -89,10 +89,10 @@ cluster1 = []
 cluster2 = []
 
 
-for i in range(len(prediction)):
+for i in range(len(prediction2)):
     if prediction2[i] == 0 :
         cluster0.append(newData[i])
-    if prediction2[i] == 1:
+    elif prediction2[i] == 1:
         cluster1.append(newData[i])
     else:
         cluster2.append(newData[i])
@@ -100,9 +100,9 @@ for i in range(len(prediction)):
 
 plt.scatter([i[0] for i in cluster0] , [i[1] for i in cluster0], color = "blue")
 
-#plt.scatter([i[0] for i in cluster1] , [i[1] for i in cluster1], color = "green")
+plt.scatter([i[0] for i in cluster1] , [i[1] for i in cluster1], color = "green")
 
-#plt.scatter([i[0] for i in cluster2] , [i[1] for i in cluster2], color = "red")
+plt.scatter([i[0] for i in cluster2] , [i[1] for i in cluster2], color = "red")
 
 #plt.scatter([point[0] for point in newData], [point[1] for point in newData])
 
