@@ -48,13 +48,8 @@ for train_index, test_index in kf.split(data):
     trainingDataIn, trainingDataOut = divide([data[i] for i in train_index])
     testDataIn, testDataOut = divide([data[i] for i in test_index])
 
-<<<<<<< HEAD
     mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = 1, n_iter_no_change= 10000,max_iter=100000, random_state=0)
     mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = 1, random_state=0, max_iter= 100000)
-=======
-    mlpEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=True, alpha = alpha, random_state=0)
-    mlpNoEarlyStoping = MLPClassifier(hidden_layer_sizes=[3,2],activation="relu", early_stopping=False, alpha = alpha, random_state=0)
->>>>>>> 199d6caf76fc7d32c85ded7551b118d970c9433e
 
     mlpEarlyStoping.fit(trainingDataIn, trainingDataOut)
     mlpNoEarlyStoping.fit(trainingDataIn, trainingDataOut)

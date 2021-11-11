@@ -21,18 +21,10 @@ def getMeanAccuracy(accuracies): # Calculates Mean Accuracy
 def sumSquaredErrors(predictions, targets): # Calculates the sum of Squared Errors
     return sum([(predictions[i] - targets[i])**2 for i in range(len(targets))])
 
-<<<<<<< HEAD
-data = [list(e) for e in arff.loadarff("kin8nm.arff")[0]]
-hiddenLayers = [8,6,8]
-clfReg = MLPRegressor(hidden_layer_sizes= hiddenLayers,  activation="relu", alpha = 0.0031, learning_rate_init=0.004, early_stopping=True, random_state=0)
-clfNoReg = MLPRegressor(hidden_layer_sizes=hiddenLayers,  activation="relu", alpha = 0, random_state=0)
-
-=======
 data = [list(e) for e in arff.loadarff("kin8nm.arff")[0]] 
 hiddenLayers = [3,2]
 clfReg = MLPRegressor(hidden_layer_sizes= hiddenLayers,activation="relu", early_stopping=False, alpha = 0.0031, random_state=0)
 clfNoReg = MLPRegressor(hidden_layer_sizes=hiddenLayers,activation="relu", early_stopping=False, alpha = 0, random_state=0)
->>>>>>> 199d6caf76fc7d32c85ded7551b118d970c9433e
 predictionsReg = []
 predictionsNoReg = []
 
