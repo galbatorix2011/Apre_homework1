@@ -71,15 +71,15 @@ dataIn, dataOut = divide(data)
 
 newData = SelectKBest(mutual_info_classif, k=2).fit_transform(dataIn,dataOut)
 
-print(newData)
+#print(newData)
 
 kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
-kmeansK3 = KMeans(n_clusters=3, random_state=0).fit(newData)
+kmeansK3 = KMeans(n_clusters=3, random_state=0, max_iter=20000).fit(newData)
 
 prediction = list(kmeans.labels_)
 prediction2 = list(kmeansK3.labels_)
-print(getECRScore(dataOut, prediction))
-print()
+#print(getECRScore(dataOut, prediction))
+#print()
 x = silhouette_score(dataIn, prediction)
 
 
@@ -89,14 +89,19 @@ cluster1 = []
 cluster2 = []
 
 
-for i in range(len(prediction)):
+for i in range(len(prediction2)):
     if prediction2[i] == 0 :
         cluster0.append(newData[i])
-    if prediction2[i] == 1:
+    elif prediction2[i] == 1:
         cluster1.append(newData[i])
     else:
         cluster2.append(newData[i])
-
+print("cluster 0:")
+print([list(e) for e in cluster0])
+print("cluster 1:")
+print([list(e) for e in cluster1])
+print("cluster 2:")
+print([list(e) for e in cluster2])
 
 plt.scatter([i[0] for i in cluster0] , [i[1] for i in cluster0], color = "blue")
 
