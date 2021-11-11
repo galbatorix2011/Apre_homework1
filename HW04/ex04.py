@@ -41,7 +41,7 @@ def getAccuracy(predictions, real):
 def getMeanAccuracy(accuracies):
     return sum(accuracies) / len(accuracies)
 
-def getECRScore(dataOut, prediction):
+def getECRScore(dataOut, prediction, n):
     c0Benign = 0
     c0Malignant = 0
     
@@ -61,7 +61,7 @@ def getECRScore(dataOut, prediction):
 
     c0Total = c0Benign + c0Malignant
     c1Total = c1Benign + c1Malignant
-    return ((c0Total - max(c0Benign, c0Malignant)) + (c1Total - max(c1Benign, c1Malignant))) / 2
+    return ((c0Total - max(c0Benign, c0Malignant)) + (c1Total - max(c1Benign, c1Malignant))) / n
     
 
 data = getData("data.txt")  # Training Data Stored
@@ -71,16 +71,42 @@ dataIn, dataOut = divide(data)
 
 newData = SelectKBest(mutual_info_classif, k=2).fit_transform(dataIn,dataOut)
 
+<<<<<<< HEAD
 #print(newData)
 
 kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
 kmeansK3 = KMeans(n_clusters=3, random_state=0, max_iter=20000).fit(newData)
+=======
+print(dataIn)
+
+kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
+kmeansK3s = KMeans(n_clusters=3, random_state=0).fit(dataIn)
+
+
+kmeansK3 = KMeans(n_clusters=3, random_state=0).fit(newData)
+>>>>>>> fea395f4396b8db758e9d9af093786fac4c18952
 
 prediction = list(kmeans.labels_)
+predictionK3s = list(kmeansK3s.labels_)
 prediction2 = list(kmeansK3.labels_)
+<<<<<<< HEAD
 #print(getECRScore(dataOut, prediction))
 #print()
 x = silhouette_score(dataIn, prediction)
+=======
+print("ECR K2 ---> "+ str(getECRScore(dataOut, prediction, 2)))
+print("ECR K3 ---> "+ str(getECRScore(dataOut, predictionK3s, 2)))
+print()
+print("Silhouette K2 ---> "+ str(silhouette_score(dataIn, prediction)))
+print("Silhouette K3 ---> "+ str(silhouette_score(dataIn, predictionK3s)))
+
+print("#-" * 30)
+
+print("ECR 5 ---> "+ str(getECRScore(dataOut, prediction2, 3)))
+print("Silhouette 5 ---> "+ str(silhouette_score(dataIn, prediction2)))
+
+      
+>>>>>>> fea395f4396b8db758e9d9af093786fac4c18952
 
 
 
@@ -105,9 +131,9 @@ print([list(e) for e in cluster2])
 
 plt.scatter([i[0] for i in cluster0] , [i[1] for i in cluster0], color = "blue")
 
-#plt.scatter([i[0] for i in cluster1] , [i[1] for i in cluster1], color = "green")
+plt.scatter([i[0] for i in cluster1] , [i[1] for i in cluster1], color = "green")
 
-#plt.scatter([i[0] for i in cluster2] , [i[1] for i in cluster2], color = "red")
+plt.scatter([i[0] for i in cluster2] , [i[1] for i in cluster2], color = "red")
 
 #plt.scatter([point[0] for point in newData], [point[1] for point in newData])
 
