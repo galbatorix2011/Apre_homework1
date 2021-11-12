@@ -71,7 +71,7 @@ dataIn, dataOut = divide(data)
 
 newData = SelectKBest(mutual_info_classif, k=2).fit_transform(dataIn,dataOut)
 
-print(dataIn)
+#print(dataIn)
 
 kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
 kmeansK3s = KMeans(n_clusters=3, random_state=0).fit(dataIn)
