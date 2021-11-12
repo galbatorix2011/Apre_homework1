@@ -119,7 +119,7 @@ print("Silhouette K3 ---> "+ str(silhouette_score(dataIn, predictionK3s)))
 print("#-" * 30)
 
 print("ECR 5 ---> "+ str(getECRScore(dataOut, prediction2, 3)))
-print("Silhouette 5 ---> "+ str(silhouette_score(dataIn, prediction2)))
+print("Silhouette 5 ---> "+ str(silhouette_score(newData, prediction2)))
 
       
 
@@ -138,17 +138,18 @@ for i in range(len(prediction2)):
     else:
         cluster2.append(newData[i])
 
-plt.scatter([i[0] for i in cluster0] , [i[1] for i in cluster0], color = "blue")
+plt.scatter([i[0] for i in cluster0] , [i[1] for i in cluster0], color = "blue", label = "cluster 0")
 
-plt.scatter([i[0] for i in cluster1] , [i[1] for i in cluster1], color = "green")
+plt.scatter([i[0] for i in cluster1] , [i[1] for i in cluster1], color = "green", label = "cluster 1")
 
-plt.scatter([i[0] for i in cluster2] , [i[1] for i in cluster2], color = "red")
+plt.scatter([i[0] for i in cluster2] , [i[1] for i in cluster2], color = "red", label = "cluster 2")
 
 #plt.scatter([point[0] for point in newData], [point[1] for point in newData])
 
 
 #plt.scatter([newData[i][0]  for i in range(len(prediction)) if prediction[i] == 1 ],[newData[i][1]  for i in range(len(prediction)) if prediction[i] == 1 ])
 #plt.scatter([newData[i][0]  for i in range(len(prediction)) if prediction[i] == 0 ],[newData[i][1]  for i in range(len(prediction)) if prediction[i] == 0 ])
+plt.legend()
 plt.show()
 #print(x)
     
