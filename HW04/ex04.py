@@ -62,14 +62,15 @@ data = getData("data.txt")  # Training Data Stored
 dataIn, dataOut = divide(data)
 
 newData = SelectKBest(mutual_info_classif, k=2).fit_transform(dataIn,dataOut)
+#NewData are the data points but only with the top-2 features
 
-kmeans = KMeans(n_clusters=2, random_state=0).fit(dataIn)
-kmeansK3s = KMeans(n_clusters=3, random_state=0).fit(dataIn)
-kmeansK3 = KMeans(n_clusters=3, random_state=0).fit(newData)
+kmeansK2 = KMeans(n_clusters=2, random_state=0).fit(dataIn)
+kmeansK3 = KMeans(n_clusters=3, random_state=0).fit(dataIn)
+kmeansEx5 = KMeans(n_clusters=3, random_state=0).fit(newData)
 
-labelK2 = list(kmeans.labels_)
-labelK3 = list(kmeansK3s.labels_)
-labelEx5 = list(kmeansK3.labels_)
+labelK2 = list(kmeansK2.labels_)
+labelK3 = list(kmeansK3.labels_)
+labelEx5 = list(kmeansEx5.labels_)
 
 print("ECR K2 ---> "+ str(getECRScore(dataOut, labelK2, 2)))
 print("ECR K3 ---> "+ str(getECRScore(dataOut, labelK3, 3)))
